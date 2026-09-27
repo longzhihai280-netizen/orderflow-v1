@@ -19,7 +19,11 @@ export async function requireApiUser(options?: { admin?: boolean }) {
 
 export function errorResponse(error: unknown) {
   if (error instanceof ApiError) return Response.json({ error: error.message }, { status: error.status });
-  const message = error instanceof Error ? error.message : "Unexpected server error.";
+  const message = error instanceof Error
+    ? error.message
+    : typeof error === "object" && error !== null && "message" in error && typeof error.message === "string"
+      ? error.message
+      : "Unexpected server error.";
   const permission = message.includes("permission") || message.includes("disabled") || message.includes("Admin access");
   return Response.json({ error: message }, { status: permission ? 403 : 400 });
 }
