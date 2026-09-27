@@ -5,7 +5,7 @@ type Context = { params: Promise<{ id: string }> };
 export async function GET(_request: Request, context: Context) {
   try {
     const { id } = await context.params;
-    const { supabase } = await requireApiUser();
+    const { supabase, profile } = await requireApiUser();
     const [orderResult, filesResult, activityResult] = await Promise.all([
       supabase.from("orders_dashboard").select("*").eq("id", id).single(),
       supabase.from("order_files").select("*").eq("order_id", id).is("deleted_at", null).order("uploaded_at"),
@@ -14,7 +14,7 @@ export async function GET(_request: Request, context: Context) {
     if (orderResult.error) throw orderResult.error;
     if (filesResult.error) throw filesResult.error;
     if (activityResult.error) throw activityResult.error;
-    return Response.json({ order: orderResult.data, files: filesResult.data || [], activity: activityResult.data || [] });
+    return Response.json({ order: orderResult.data, files: filesResult.data || [], activity: activityResult.data || [], profile });
   } catch (error) {
     return errorResponse(error);
   }
