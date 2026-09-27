@@ -216,7 +216,6 @@ declare
   v_name text;
 begin
   if not public.is_active_user() then raise exception 'Account is disabled or unauthorized' using errcode = '42501'; end if;
-  if p_section_type = 'ORIGINAL' then raise exception 'Original files are read-only after order creation'; end if;
 
   update public.orders
   set accepted_by = auth.uid(), accepted_at = now(), workflow_status = 'IN_PROGRESS'
@@ -317,6 +316,7 @@ declare
   v_action text;
 begin
   if not public.is_active_user() then raise exception 'Account is disabled or unauthorized' using errcode = '42501'; end if;
+  if p_section_type = 'ORIGINAL' then raise exception 'Original files are read-only after order creation'; end if;
   if p_file_size <= 0 or p_file_size > 10485760 then raise exception 'Invalid file size'; end if;
   if p_section_type = 'INVOICE' and p_mime_type <> 'application/pdf' then raise exception 'Invoice must be a PDF'; end if;
   if p_section_type in ('ORIGINAL', 'PICKING') and p_mime_type not in ('image/jpeg','image/png','image/webp') then raise exception 'Unsupported image type'; end if;
