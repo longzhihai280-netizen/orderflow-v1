@@ -24,12 +24,9 @@ export function OrderDetail({ orderId }: { orderId: string }) {
 
   const load = useCallback(async () => {
     try {
-      const [detail, current] = await Promise.all([
-        api<OrderDetailResponse>(`/api/orders/${orderId}`),
-        api<{ profile: Profile }>("/api/profile")
-      ]);
+      const detail = await api<OrderDetailResponse>(`/api/orders/${orderId}`);
       setData(detail);
-      setProfile(current.profile);
+      setProfile(detail.profile);
       setError("");
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : "Could not load the order.");
@@ -129,5 +126,5 @@ function FileViewer({ orderId, file, defaultOpen = false }: { orderId: string; f
     if (!open || url) return;
     api<{ url: string }>(`/api/orders/${orderId}/files/${file.id}/signed-url`).then((data) => setUrl(data.url)).catch((reason) => setError(reason.message));
   }, [open, url, orderId, file.id]);
-  return <div className="file-viewer"><div className="file-line"><div><b>{file.original_filename}</b><small>{(file.file_size / 1024 / 1024).toFixed(1)} MB · Uploaded {formatDateTime(file.uploaded_at)}</small></div><button className="button text" onClick={() => setOpen((value) => !value)}>{open ? "Hide" : "View"}</button></div>{open && <div className="file-preview">{error ? <div className="alert error">{error}</div> : !url ? <span>Loading preview…</span> : isImage ? <img src={url} alt={file.original_filename} /> : <><iframe src={url} title={file.original_filename} /><a className="button secondary small" href={url} target="_blank" rel="noreferrer">Open PDF</a></>}</div>}</div>;
+  return <div className="file-viewer"><div className="file-line"><div><b>{file.original_filename}</b><small>{(file.file_size / 1024 / 1024).toFixed(1)} MB · Uploaded {formatDateTime(file.uploaded_at)}</small></div><button className="button text" onClick={() => setOpen((value) => !value)}>{open ? "Hide" : "View"}</button></div>{open && <div className="file-preview">{error ? <div className="alert error">{error}</div> : !url ? <span>Loading preview…</span> : isImage ? <img src={url} alt={file.original_filename} loading="lazy" decoding="async" /> : <><iframe src={url} title={file.original_filename} loading="lazy" /><a className="button secondary small" href={url} target="_blank" rel="noreferrer">Open PDF</a></>}</div>}</div>;
 }

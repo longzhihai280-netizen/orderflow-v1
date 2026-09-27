@@ -43,12 +43,9 @@ export function OrdersDashboard() {
       setError("");
       const params = new URLSearchParams({ from, to });
       if (debouncedQuery) params.set("q", debouncedQuery);
-      const [orderData, statData] = await Promise.all([
-        api<{ orders: OrderSummary[] }>(`/api/orders?${params}`),
-        api<{ statistics: OrderStatistics }>(`/api/statistics?${params}`)
-      ]);
+      const orderData = await api<{ orders: OrderSummary[]; statistics: OrderStatistics }>(`/api/orders?${params}`);
       setOrders(orderData.orders);
-      setStatistics({ ...emptyStats, ...statData.statistics });
+      setStatistics({ ...emptyStats, ...orderData.statistics });
       setSelectedId((current) => current && orderData.orders.some((order) => order.id === current) ? current : orderData.orders[0]?.id || null);
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : "Could not load orders.");
