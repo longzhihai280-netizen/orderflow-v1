@@ -14,9 +14,17 @@ export async function GET(request: Request) {
     const query = (url.searchParams.get("q") || "").trim().slice(0, 100) || null;
     if (!datePattern.test(from) || !datePattern.test(to)) return Response.json({ error: "Invalid date range." }, { status: 400 });
 
-    const { data, error } = await supabase.rpc("search_orders", { p_from: from, p_to: to, p_query: query });
-    if (error) throw error;
-    return Response.json({ orders: data || [] });
+    const [ordersResult, statisticsResult] = await Promise.all([
+      supabase.rpc("search_orders", { p_from: from, p_to: to, p_query: query }),
+      supabase.rpc("get_order_statistics", { p_from: from, p_to: to, p_query: query })
+    ]);
+    if (ordersResult.error) throw ordersResult.error;
+    if (statisticsResult.error) throw statisticsResult.error;
+    const statistics = statisticsResult.data?.[0] || {};
+    return Response.json({
+      orders: ordersResult.data || [],
+      statistics: Object.fromEntries(Object.entries(statistics).map(([key, value]) => [key, Number(value)]))
+    });
   } catch (error) {
     return errorResponse(error);
   }
