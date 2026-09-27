@@ -72,6 +72,7 @@ export interface OrderDetailResponse {
   order: OrderSummary;
   files: OrderFile[];
   activity: ActivityLog[];
+  profile: Profile;
 }
 
 export interface OrderStatistics {
