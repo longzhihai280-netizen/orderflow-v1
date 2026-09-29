@@ -23,7 +23,9 @@ export function useRealtimeRefresh(onChange: () => void, orderId?: string) {
       .on("postgres_changes", { event: "*", schema: "public", table: "orders", ...(orderId && { filter: `id=eq.${orderId}` }) }, scheduleRefresh)
       .on("postgres_changes", { event: "*", schema: "public", table: "order_files", ...(filter && { filter }) }, scheduleRefresh);
     if (orderId) {
-      channel = channel.on("postgres_changes", { event: "*", schema: "public", table: "order_activity_logs", filter }, scheduleRefresh);
+      channel = channel
+        .on("postgres_changes", { event: "*", schema: "public", table: "order_activity_logs", filter }, scheduleRefresh)
+        .on("postgres_changes", { event: "*", schema: "public", table: "order_additions", filter }, scheduleRefresh);
     }
     channel.subscribe();
     return () => {
