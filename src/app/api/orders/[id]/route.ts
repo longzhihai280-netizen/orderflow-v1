@@ -6,15 +6,17 @@ export async function GET(_request: Request, context: Context) {
   try {
     const { id } = await context.params;
     const { supabase, profile } = await requireApiUser();
-    const [orderResult, filesResult, activityResult] = await Promise.all([
+    const [orderResult, filesResult, additionsResult, activityResult] = await Promise.all([
       supabase.from("orders_dashboard").select("*").eq("id", id).single(),
       supabase.from("order_files").select("*").eq("order_id", id).is("deleted_at", null).order("uploaded_at"),
+      supabase.from("order_additions_with_creator").select("*").eq("order_id", id).order("created_at"),
       supabase.from("order_activity_with_actor").select("*").eq("order_id", id).order("created_at", { ascending: false })
     ]);
     if (orderResult.error) throw orderResult.error;
     if (filesResult.error) throw filesResult.error;
+    if (additionsResult.error) throw additionsResult.error;
     if (activityResult.error) throw activityResult.error;
-    return Response.json({ order: orderResult.data, files: filesResult.data || [], activity: activityResult.data || [], profile });
+    return Response.json({ order: orderResult.data, files: filesResult.data || [], additions: additionsResult.data || [], activity: activityResult.data || [], profile });
   } catch (error) {
     return errorResponse(error);
   }

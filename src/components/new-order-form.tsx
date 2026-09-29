@@ -5,6 +5,7 @@ import { uploadOriginalDraft } from "@/lib/uploads";
 import type { Priority } from "@/types/domain";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { ImagePicker } from "./image-picker";
 
 export function NewOrderForm() {
   const router = useRouter();
@@ -45,8 +46,7 @@ export function NewOrderForm() {
         <label className="field"><span>Priority</span><select value={priority} onChange={(e) => setPriority(e.target.value as Priority)}><option>NORMAL</option><option>HIGH</option><option>URGENT</option></select></label>
       </div>
       <label className="field"><span>Original Order Text</span><textarea rows={8} value={originalText} onChange={(e) => setOriginalText(e.target.value)} maxLength={20000} placeholder={"Iget Bar Plus 4.0 x 10\nVuse Berry x 5"} /></label>
-      <label className="field"><span>Original Order Images</span><input type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={(e) => setFiles(Array.from(e.target.files || []))} /><small>JPG, PNG or WEBP. Up to 10 MB each.</small></label>
-      {files.length > 0 && <ul className="file-list compact">{files.map((file) => <li key={`${file.name}-${file.size}`}>{file.name} <span>{(file.size / 1024 / 1024).toFixed(1)} MB</span></li>)}</ul>}
+      <div className="field"><span>Original Order Images</span><ImagePicker files={files} onChange={setFiles} disabled={loading} label={files.length ? "Add more images" : "Choose images"} /></div>
       <label className="field"><span>Order Notes</span><textarea rows={3} value={notes} onChange={(e) => setNotes(e.target.value)} maxLength={5000} placeholder="Internal note, kept separately from the original order" /></label>
       <div className="form-actions"><button className="button primary" disabled={loading}>{loading ? "Creating order…" : "Send Order"}</button><button className="button secondary" type="button" onClick={() => router.back()} disabled={loading}>Cancel</button></div>
     </form>

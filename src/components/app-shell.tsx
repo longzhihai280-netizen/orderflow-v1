@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 const nav = [
   { href: "/orders", label: "Orders" },
   { href: "/orders/new", label: "Send Order" },
+  { href: "/chat", label: "Chat" },
   { href: "/orders?focus=search", label: "Search" },
   { href: "/account", label: "Account" }
 ];
