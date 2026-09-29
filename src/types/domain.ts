@@ -55,6 +55,17 @@ export interface OrderFile {
   uploader_username?: string;
   uploaded_at: string;
   deleted_at: string | null;
+  addition_id: string | null;
+}
+
+export interface OrderAddition {
+  id: string;
+  order_id: string;
+  addition_text: string | null;
+  created_by: string;
+  created_at: string;
+  creator_username: string;
+  creator_display_name: string;
 }
 
 export interface ActivityLog {
@@ -71,8 +82,34 @@ export interface ActivityLog {
 export interface OrderDetailResponse {
   order: OrderSummary;
   files: OrderFile[];
+  additions: OrderAddition[];
   activity: ActivityLog[];
   profile: Profile;
+}
+
+export interface ChatAttachment {
+  id: string;
+  message_id: string;
+  original_filename: string;
+  mime_type: string;
+  file_size: number;
+  uploaded_at: string;
+}
+
+export interface ChatMessage {
+  id: string;
+  message_text: string | null;
+  order_id: string | null;
+  sender_id: string;
+  sender_username: string;
+  sender_display_name: string;
+  created_at: string;
+  daily_order_number: number | null;
+  order_customer_name: string | null;
+  order_priority: Priority | null;
+  order_workflow_status: WorkflowStatus | null;
+  order_accepted_by_display_name: string | null;
+  attachments: ChatAttachment[];
 }
 
 export interface OrderStatistics {
