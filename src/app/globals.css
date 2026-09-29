@@ -173,6 +173,7 @@ h3 { margin-bottom: 6px; font-size: 1rem; }
 .hero-grid > div:first-child { display: flex; flex-direction: column; }
 .hero-grid small { margin-top: 2px; color: var(--muted); }
 .accept-button { margin-top: 18px; min-width: 170px; }
+.hero-actions { margin-top: 18px; display: flex; gap: 9px; flex-wrap: wrap; }
 .detail-columns { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(310px, .65fr); gap: 18px; align-items: start; }
 .detail-side { position: sticky; top: 86px; }
 .original-text { margin: 0; padding: 17px; border: 1px solid var(--line); border-radius: 10px; color: var(--ink); background: #fafbfc; font: inherit; white-space: pre-wrap; word-break: break-word; }
@@ -195,6 +196,8 @@ h3 { margin-bottom: 6px; font-size: 1rem; }
 .upload-drop > span { color: var(--blue); font-size: 1.7rem; }
 .upload-drop b { color: var(--ink); }
 .active-file { display: flex; flex-direction: column; gap: 9px; }
+.processing-files { margin-bottom: 12px; display: flex; flex-direction: column; gap: 12px; }
+.add-files-button { width: fit-content; }
 .file-actions { display: flex; gap: 7px; }
 .file-viewer { min-width: 0; border: 1px solid var(--line); border-radius: 9px; overflow: hidden; }
 .file-line { min-height: 54px; padding: 9px 11px; display: flex; justify-content: space-between; align-items: center; gap: 10px; background: #fafbfc; }
@@ -238,6 +241,43 @@ h3 { margin-bottom: 6px; font-size: 1rem; }
 .file-list li { padding: 8px 10px; display: flex; justify-content: space-between; border-radius: 7px; background: var(--soft); }
 .file-list span { color: var(--muted); }
 
+.image-picker { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.image-picker > small { color: var(--muted); font-size: .78rem; }
+.image-preview-grid { width: 100%; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.image-preview-grid figure { min-width: 0; margin: 0; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--soft); }
+.image-preview-grid img { width: 100%; aspect-ratio: 1.15; display: block; object-fit: cover; }
+.image-preview-grid figcaption { padding: 7px 8px; display: flex; align-items: center; gap: 6px; }
+.image-preview-grid figcaption span { min-width: 0; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); font-size: .72rem; }
+.image-preview-grid figcaption button { padding: 3px; border: 0; color: var(--red); background: transparent; cursor: pointer; font-size: .72rem; font-weight: 750; }
+
+.addition-list { margin: 0; padding: 0; list-style: none; }
+.addition-list > li { padding: 18px 0; border-top: 1px solid var(--line); }
+.addition-meta { margin-bottom: 10px; display: flex; justify-content: space-between; gap: 12px; }
+.addition-meta time { color: var(--muted); font-size: .78rem; }
+.add-to-order-button { margin-top: 16px; }
+.add-to-order-form { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 15px; }
+
+.chat-panel { overflow: hidden; }
+.chat-panel > .alert { margin: 16px 16px 0; }
+.chat-messages { height: min(62vh, 680px); min-height: 360px; padding: 22px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; background: #f7f8fb; }
+.chat-message { max-width: min(720px, 86%); padding: 13px 15px; align-self: flex-start; border: 1px solid var(--line); border-radius: 5px 15px 15px 15px; background: white; box-shadow: 0 4px 14px rgba(24, 34, 54, .05); }
+.chat-message.own { align-self: flex-end; border-color: #c6d4fb; border-radius: 15px 5px 15px 15px; background: #f0f5ff; }
+.chat-message-meta { margin-bottom: 7px; display: flex; align-items: baseline; gap: 12px; }
+.chat-message-meta time { color: var(--muted); font-size: .7rem; }
+.chat-message > p { margin: 0; white-space: pre-wrap; word-break: break-word; }
+.chat-images { margin-top: 10px; display: grid; grid-template-columns: repeat(2, minmax(120px, 260px)); gap: 8px; }
+.chat-images img { width: 100%; max-height: 300px; aspect-ratio: 1.1; display: block; object-fit: cover; border-radius: 8px; }
+.chat-image-loading, .chat-image-error { min-height: 120px; padding: 20px; display: grid; place-items: center; border-radius: 8px; color: var(--muted); background: #e8ebf1; }
+.shared-order { min-width: min(430px, 100%); margin-top: 10px; padding: 13px; border: 1px solid #b9caef; border-radius: 10px; display: grid; gap: 8px; color: var(--ink); background: white; }
+.shared-order > div:first-child { display: flex; flex-direction: column; gap: 2px; }
+.shared-order > div:first-child span, .shared-order small { color: var(--muted); font-size: .75rem; }
+.shared-order-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+.shared-order.unavailable { color: var(--muted); }
+.chat-composer { padding: 16px; border-top: 1px solid var(--line); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px 14px; align-items: end; background: white; }
+.chat-composer .field { grid-column: 1 / -1; }
+.chat-composer .image-picker { min-width: 0; }
+.chat-composer .image-preview-grid { grid-template-columns: repeat(6, minmax(80px, 1fr)); }
+
 @media (max-width: 1100px) {
   .stats-grid { grid-template-columns: repeat(3, 1fr); }
   .filter-bar { flex-wrap: wrap; }
@@ -267,6 +307,7 @@ h3 { margin-bottom: 6px; font-size: 1rem; }
   .hero-grid { grid-template-columns: 1fr; }
   .hero-grid > div:first-child { grid-column: auto; }
   .original-images { grid-template-columns: 1fr; }
+  .image-preview-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
 @media (max-width: 600px) {
@@ -293,4 +334,11 @@ h3 { margin-bottom: 6px; font-size: 1rem; }
   .login-page { padding: 14px; }
   .login-card { padding: 26px 20px; }
   .user-table { min-width: 690px; }
+  .image-preview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .chat-messages { height: 58vh; min-height: 320px; padding: 12px; }
+  .chat-message { max-width: 94%; }
+  .chat-images { grid-template-columns: repeat(2, minmax(90px, 1fr)); }
+  .chat-composer { grid-template-columns: 1fr; }
+  .chat-composer .button.primary { width: 100%; }
+  .chat-composer .image-preview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
