@@ -17,6 +17,10 @@ OrderFlow is a mobile-first V1 application for receiving, claiming and completin
 - Private files with short-lived signed viewing URLs and one-time signed direct uploads
 - Responsive English-only UI for iPhone, Android, iPad, Windows and macOS browsers
 - Soft order archiving by Admins and retained file/audit metadata
+- Multi-image order creation with previews, removable selections and immutable original evidence
+- Multiple appendable files in Picking, Invoice and Ticket, with per-file View, Replace and Delete
+- Immutable, repeatable Order Additions containing text and up to eight images
+- Realtime shared team Chat with text, images and live linked order cards
 
 ## Architecture
 
@@ -80,6 +84,10 @@ supabase db push
 ```
 
 The migration creates the schema, constraints, private `order-files` bucket, RLS policies, realtime publication entries and database functions.
+
+For an existing V1 deployment, apply migrations in filename order. The V1.1 upgrade is
+[`supabase/migrations/202609280001_collaboration_features.sql`](supabase/migrations/202609280001_collaboration_features.sql).
+It preserves every existing order and file, removes only the old one-active-file-per-section index, and adds Order Additions, Chat, RLS policies, RPCs and Realtime publication entries. No new environment variables are required.
 
 ### 3. Configure the application
 
@@ -171,9 +179,11 @@ Before production, perform this two-session acceptance test:
 2. Create an image/text order and confirm the same daily number appears in both sessions.
 3. Click **Accept Order** simultaneously. Confirm exactly one succeeds and the other receives the named conflict message.
 4. Upload Picking, Invoice and Ticket. Confirm automatic completion, statistics and activity logs update in both sessions.
-5. Delete Ticket. Confirm the order automatically returns to In Progress and the activity log records why.
-6. Confirm an Employee cannot open Users and that a disabled employee loses application access.
-7. Test on an iPhone-sized viewport and one physical phone, including camera/photo upload.
+5. Add several files to each processing section. Delete all Ticket files one by one and confirm the order returns to In Progress only when the last active Ticket file is removed.
+6. Add two separate Order Additions, including a text-plus-multiple-images addition, and confirm the Original Order remains unchanged.
+7. Send chat text and multiple images in two sessions, then share an order and confirm its linked card reflects later status changes.
+8. Confirm an Employee cannot delete an order or open Users, while an Admin Delete Order action removes it from lists/statistics and retains its audit fields.
+9. Test on an iPhone-sized viewport and one physical phone, including camera/photo-library upload.
 
 ## Backups and recovery
 
